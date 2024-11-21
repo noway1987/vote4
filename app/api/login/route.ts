@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const { username, password } = await req.json();
 
   const user = await prisma.user.findUnique({
@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
   });
 
   if (user && user.password === password) {
-    return NextResponse.json({ success: true });
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
   }
 
-  return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+  return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
 }

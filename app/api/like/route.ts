@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const { username, cardId } = await req.json();
 
   const existingLike = await prisma.like.findFirst({
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       where: { id: cardId },
       data: { likes: { decrement: 1 } },
     });
-    return NextResponse.json({ action: 'unliked' });
+    return new Response(JSON.stringify({ action: 'unliked' }), { status: 200 });
   }
 
   await prisma.like.create({ data: { username, cardId } });
@@ -23,5 +23,5 @@ export async function POST(req: NextRequest) {
     data: { likes: { increment: 1 } },
   });
 
-  return NextResponse.json({ action: 'liked' });
+  return new Response(JSON.stringify({ action: 'liked' }), { status: 200 });
 }
