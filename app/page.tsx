@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
+
 
 interface Card {
   id: number;
@@ -33,7 +35,7 @@ export default function Home() {
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       {cards.map((card) => (
         <div key={card.id} className="p-4 border rounded shadow">
-          {card.image && <img src={card.image} alt={card.name} />}
+          {card.image && <Image src={card.image} alt={card.name} />}
           <h3>{card.name}</h3>
           <p>{card.price} €</p>
           <button
